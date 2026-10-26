@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     stages {
-        stage('Checkout Source Code') {
+        stage('Checkout') {
             steps {
                 checkout scm
             }
@@ -10,25 +10,23 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                echo 'Installing Python test dependencies...'
-                sh 'python3 -m pip install -r requirements.txt'
+                bat 'python -m pip install -r requirements.txt'
             }
         }
 
-        stage('Execute Automated Tests') {
+        stage('Run Form Tests') {
             steps {
-                echo 'Running BeautifulSoup DOM validation tests...'
-                sh 'python3 test_form.py'
+                bat 'python test_form.py'
             }
         }
     }
 
     post {
         success {
-            echo 'Pipeline Execution Status: SUCCESS (All HTML input fields verified)'
+            echo 'Build Passed: All HTML form fields verified successfully!'
         }
         failure {
-            echo 'Pipeline Execution Status: FAILURE (HTML form verification failed)'
+            echo 'Build Failed: HTML form verification failed!'
         }
     }
 }
